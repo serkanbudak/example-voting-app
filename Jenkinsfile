@@ -1,7 +1,7 @@
 pipeline {
   agent {
     node {
-      label 'ubuntu-1604-aufs-stable'
+      label 'sso'
     }
   }
   stages {
@@ -20,35 +20,5 @@ pipeline {
         sh 'docker build -t dockersamples/worker ./worker'
       }
     }
-    stage('Push result image') {
-      when {
-        branch 'master'
-      }
-      steps {
-        withDockerRegistry(credentialsId: 'dockerbuildbot-index.docker.io', url:'') {
-          sh 'docker push dockersamples/result'
-        }
-      }
     }
-    stage('Push vote image') {
-      when {
-        branch 'master'
-      }
-      steps {
-        withDockerRegistry(credentialsId: 'dockerbuildbot-index.docker.io', url:'') {
-          sh 'docker push dockersamples/vote'
-        }
-      }
-    }
-    stage('Push worker image') {
-      when {
-        branch 'master'
-      }
-      steps {
-        withDockerRegistry(credentialsId: 'dockerbuildbot-index.docker.io', url:'') {
-          sh 'docker push dockersamples/worker'
-        }
-      }
-    }
-  }
 }
